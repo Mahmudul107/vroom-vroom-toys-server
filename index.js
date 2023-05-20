@@ -36,7 +36,7 @@ async function run() {
     // const subCategoriesCollection = client.db('subToysCar').collection('subCategories');
     const toysCollection = client.db('toysDB').collection('sub-toys');
 
-    // Read data
+    // Read the data
     app.get('/addToy', async (req, res) => {
       const cursor = toysCollection.find()
       const result = await cursor.toArray()
@@ -71,6 +71,15 @@ async function run() {
       })
       
       res.send(singleCar)
+    })
+
+
+    // Get My toys toy details
+    app.get('/addToy/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id)}
+      const result = await toysCollection.findOne(query)
+      res.send(result)
     })
 
 

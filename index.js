@@ -43,13 +43,29 @@ async function run() {
       res.send(result)
     })
 
-
+    // To insert a new data from the form in the front-end.
     app.post('/addToy', async (req, res) => {
       const newToy = req.body;
       console.log(newToy);
       const result = await toysCollection.insertOne(newToy)
       res.send(result);
     })
+
+
+    // To get a user data by email
+    app.get('/userData/:email', async (req, res) => {
+      console.log(req.params.email)
+      const result = await toysCollection.find({sellerEmail: req.params.email}).toArray();
+      res.send(result);
+    })
+
+      // Get My toys details
+      app.get('/addToy/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id)}
+        const result = await toysCollection.findOne(query)
+        res.send(result)
+      })
 
 
 
@@ -73,14 +89,6 @@ async function run() {
       res.send(singleCar)
     })
 
-
-    // Get My toys toy details
-    app.get('/addToy/:id', async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id)}
-      const result = await toysCollection.findOne(query)
-      res.send(result)
-    })
 
 
     // Send a ping to confirm a successful connection

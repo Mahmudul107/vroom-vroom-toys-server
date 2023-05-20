@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb'); // mongodb 
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb'); // mongodb 
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
@@ -30,12 +30,49 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    
+    const carsCollection = client.db('toysCar').collection('toysCategory')
+    // const subCategoriesCollection = client.db('subToysCar').collection('subCategories');
+    const toysCollection = client.db('toysDB').collection('sub-toys');
+
+
+    app.post('/addToy', async (req, res) => {
+      const newToy = req.body;
+      console.log(newToy);
+      const result = await toysCollection.insertOne(newToy)
+      res.send(result);
+    })
+
+
+
+
+    app.get('/cars', async (req, res) => {
+      const cursor = carsCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+
+    app.get('/cars/:id', async (req, res) => {
+      const id = req.params.id;
+      // console.log(id);
+      // return
+      const cars = await carsCollection.find({}).toArray()
+      const singleCar = cars.find(car => {
+       return car.toys.find(item => item.id == id)
+      })
+      
+      res.send(singleCar)
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);

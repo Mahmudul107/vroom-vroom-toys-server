@@ -36,6 +36,13 @@ async function run() {
     // const subCategoriesCollection = client.db('subToysCar').collection('subCategories');
     const toysCollection = client.db('toysDB').collection('sub-toys');
 
+    // Read data
+    app.get('/addToy', async (req, res) => {
+      const cursor = toysCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
 
     app.post('/addToy', async (req, res) => {
       const newToy = req.body;

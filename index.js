@@ -36,14 +36,27 @@ async function run() {
     // const subCategoriesCollection = client.db('subToysCar').collection('subCategories');
     const toysCollection = client.db('toysDB').collection('sub-toys');
 
+
+
+
+    // Creating index on two fields
+    const indexKeys = { toyName: 1}
+    // Field two with actual field names
+    const indexOptions = { name: "toyName"}
+    // const result = await toysCollection.createIndex(indexKeys, indexOptions)
+
+
+  
+
+
     // Read the data
     app.get('/addToy', async (req, res) => {
-      const cursor = toysCollection.find()
+      const cursor = toysCollection.find().limit(20)
       const result = await cursor.toArray()
       res.send(result)
     })
 
-    // To insert a new data from the form in the front-end.
+    // To insert a new data from the form to front-end.
     app.post('/addToy', async (req, res) => {
       const newToy = req.body;
       console.log(newToy);

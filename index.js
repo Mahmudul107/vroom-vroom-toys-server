@@ -46,7 +46,18 @@ async function run() {
     // const result = await toysCollection.createIndex(indexKeys, indexOptions)
 
 
-  
+    // For searching by index
+    // app.get("/toysSearch/:text", async (req, res) => {
+    //   const searchText = req.params.text;
+
+    //   const result = await toysCollection.find({
+    //     $or: [
+    //       { toyName: { $regex: searchText, $options:"i"}},
+    //     ]
+    //   }).toArray();
+
+    //   res.send(result);
+    // })
 
 
     // Read the data
@@ -65,12 +76,25 @@ async function run() {
     })
 
 
+    // To delete a specific toy
+    app.delete('/deleteToy/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await toysCollection.deleteOne(query)
+      res.send(result);
+    })
+
+    
+
+
     // To get a user data by email
     app.get('/userData/:email', async (req, res) => {
       console.log(req.params.email)
       const result = await toysCollection.find({sellerEmail: req.params.email}).toArray();
       res.send(result);
     })
+
+
 
       // Get My toys details
       app.get('/addToy/:id', async (req, res) => {

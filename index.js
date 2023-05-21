@@ -40,9 +40,9 @@ async function run() {
 
 
     // Creating index on two fields
-    const indexKeys = { toyName: 1}
+    // const indexKeys = { toyName: 1}
     // Field two with actual field names
-    const indexOptions = { name: "toyName"}
+    // const indexOptions = { name: "toyName"}
     // const result = await toysCollection.createIndex(indexKeys, indexOptions)
 
 
@@ -81,6 +81,16 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)};
       const result = await toysCollection.deleteOne(query)
+      res.send(result);
+    })
+
+
+
+    // Update the data
+    app.get('/updateToy/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysCollection.findOne(query);
       res.send(result);
     })
 
